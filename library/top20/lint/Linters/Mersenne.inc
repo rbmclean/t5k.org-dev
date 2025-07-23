@@ -1,8 +1,12 @@
 <?php
 
-namespace Top20;
+namespace Top20\Linters;
 
 use PDO;
+use Top20\Linters\BaseLinter;
+use Top20\Category;
+use Top20\LintResult;
+use Top20\SubmittedPrime;
 
 /**
  * Find Mersenne primes from description/comments
@@ -10,12 +14,12 @@ use PDO;
 final class Mersenne extends BaseLinter
 {
     /**
-     * @see BaseLinter::lint
+     * @inheritDoc
      */
-    public function lint(PDO $db, SubmittedPrime $prime, array $others = []): ?LintResult
+    public function lint(PDO $db, SubmittedPrime $prime, array $others = []): array
     {
         if (!preg_match("/^2\\^\\d+-1$/", $prime->prime)) {
-            return null;
+            return [];
         }
 
         //I'm not going to bother trying to find the Mersenne # here
@@ -28,6 +32,7 @@ final class Mersenne extends BaseLinter
                 break;
             }
         }
-        return new LintResult(Category::Mersenne, true, $finalComment); //TODO existing Mersenne's have a "Mersenne" subcategory...
+        //TODO existing Mersenne's have a "Mersenne" subcategory...
+        return [new LintResult(Category::Mersenne, true, $finalComment)];
     }
 }

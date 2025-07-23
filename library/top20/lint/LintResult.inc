@@ -10,6 +10,10 @@ use PDO;
 final class LintResult
 {
     /**
+     * @var int The number of primes on this list that are considered "on the list"
+     */
+    private readonly int $threshold;
+    /**
      * Creates a LintResult
      *
      * @param Category $category What kind of archival tag?
@@ -19,11 +23,14 @@ final class LintResult
      **/
     public function __construct(
         readonly public Category $category,
-        readonly public bool     $verified,
-        readonly public string   $officialComment,
-        readonly public string   $subcategory = ""
+        readonly public bool   $verified,
+        readonly public string $officialComment,
+        readonly public string $subcategory = "",
+        int                    $threshold = -1
     )
     {
+        $this->threshold = ($threshold == -1) ?
+            ($this->subcategory == "" ? ARCHIVABLE_COUNT : ARCHIVABLE_CLASS_COUNT) : $threshold;
     }
 
     public function onList(PDO $db, string $description): bool
@@ -50,15 +57,15 @@ final class LintResult
 
         //instead of BaseLinter, just be "top 20 page"?
 
-        //TODO make constants somewhere
-        $threshold = empty($this->subcategory) ? 20 : 5;
         //TODO need to fix subcategories on non-archival classes/linters
         if (
             !$result = $db->query(
-                "SELECT prime.log10, prime.description FROM archival_tag INNER JOIN prime ON archival_tag.prime_id=prime.id 
-                 WHERE archival_tag.category_id=" . $this->category->value . " AND archival_tag.subcategory=\"$this->subcategory\" 
-                 ORDER BY archival_tag.rank_now ASC 
-                 LIMIT 1 OFFSET $threshold"
+                "SELECT prime.log10, prime.description 
+                 FROM archival_tag INNER JOIN prime ON archival_tag.prime_id=prime.id 
+                 WHERE archival_tag.category_id=" . $this->category->value .
+                (empty($this->subcategory) ? "" : " AND archival_tag.subcategory=\"$this->subcategory\" ") .
+                "ORDER BY archival_tag.rank_now ASC 
+                 LIMIT 1 OFFSET $this->threshold"
             )
         ) {
             return false;

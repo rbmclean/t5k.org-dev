@@ -2,6 +2,9 @@
 
 namespace Top20;
 
+const ARCHIVABLE_COUNT = 20;
+const ARCHIVABLE_CLASS_COUNT = 5;
+
 enum Category: int
 {
     case Twin = 1;
@@ -21,9 +24,9 @@ enum Category: int
     case GeneralizedRepunit = 16;
     case GFDivisor = 18;
     case CunninghamChain = 19;
-    case CunninghamChain2 = 20; //TODO I hate this handling...
+    case CunninghamChain2 = 20;
     case LucasAuriPrim = 21;
-    case GeneralizedLucas = 23;
+    case GeneralizedLucas = 23;//TODO skipped for discussion
     case LucasPrimitive = 24;
     case EulerIrregular = 25;
     case Irregular = 26;
@@ -31,13 +34,13 @@ enum Category: int
     case GF3 = 28;
     case GF5 = 29;
     case Factorial = 30;
-    case SophieGermain2 = 31; //TODO I hate this handling
+    case SophieGermain2 = 31; //not linted, will be removed once the PHP implementation handles all linting
     case DividesPhi = 37;
     case Fibonacci = 39;
     case FibonacciPrimPart = 40;
     case GaussianMersenne = 41;
     case GeneralizedCullen = 42;
-    case GeneralizedLucasPrim = 43;
+    case GeneralizedLucasPrim = 43;//TODO skipped for discussion
     case GeneralizedUnique = 44;
     case GeneralizedWoodall = 45;
     case Lehmer = 47;

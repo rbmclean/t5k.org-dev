@@ -159,7 +159,7 @@ function get_the_primes($error_message = '')
                     $comment
                 );
             }
-            $all_primes[] = new \Top20\SubmittedPrime($desc, $comment);
+            $all_primes[] = new \Top20\SubmittedPrime($basic_database_connection, $desc, $comment);
         }
         foreach ($all_primes as $prime) {
             $desc = $prime->prime;
@@ -261,7 +261,6 @@ function get_the_primes($error_message = '')
 
             //now, is it a valid comment?
             $lintResults = lintAll($basic_database_connection, $prime, $all_primes);
-            var_dump($lintResults);
             $newComment = ucfirst(implode(", ", $prime->singleComment));
             if ($newComment !== $comment) {
                 $Warn[] = "The comment \"" . htmlspecialchars($comment) .

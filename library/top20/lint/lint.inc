@@ -1,5 +1,7 @@
 <?php
 
+require_once "/var/www/library/math/parser.inc";
+require_once "/var/www/library/math/Number.inc";
 require_once dirname(__FILE__) . "/categories.inc";
 require_once dirname(__FILE__) . "/SubmittedPrime.inc";
 require_once dirname(__FILE__) . "/Submission.inc";
